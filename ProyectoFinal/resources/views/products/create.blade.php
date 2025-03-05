@@ -21,5 +21,8 @@
         <input type="file" name="imagen" class="form-control">
     </div>
     <button type="submit" class="btn btn-success">Guardar</button>
+    
 </form>
+<a href="{{ route('products.index') }}" class="btn btn-danger mt-5">Volver al Inicio</a>
+
 @endsection

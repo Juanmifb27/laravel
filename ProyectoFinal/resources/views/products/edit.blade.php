@@ -26,4 +26,7 @@
     </div>
     <button type="submit" class="btn btn-success">Actualizar</button>
 </form>
+
+<a href="{{ route('products.index') }}" class="btn btn-danger mt-5">Volver al Inicio</a>
+
 @endsection
