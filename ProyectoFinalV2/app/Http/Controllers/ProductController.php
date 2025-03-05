@@ -9,8 +9,8 @@ class ProductController extends Controller
 {
     public function __construct()
     {
-        // Asegurar que solo usuarios autenticados puedan acceder a las rutas excepto index y show
-        $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware('auth');
+        $this->middleware('admin')->except(['index', 'show']);
     }
 
     public function index() {
@@ -47,6 +47,10 @@ class ProductController extends Controller
         Product::create($data);
 
         return redirect()->route('products.index')->with('success', 'Producto creado correctamente.');
+    }
+
+    public function show(Product $product) {
+        return view('products.show', compact('product'));
     }
 
     public function edit(Product $product) {
