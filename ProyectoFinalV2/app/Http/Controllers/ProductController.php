@@ -3,11 +3,26 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class ProductController extends Controller {
+class ProductController extends Controller
+{
+    public function __construct()
+    {
+        // Asegurar que solo usuarios autenticados puedan acceder a las rutas excepto index y show
+        $this->middleware('auth')->except(['index', 'show']);
+    }
+
     public function index() {
         $products = Product::all();
         return view('products.index', compact('products'));
+    }
+
+    public function administracion() {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Debes iniciar sesión.');
+        }
+        return view('products.administracion');
     }
 
     public function create() {
@@ -19,23 +34,19 @@ class ProductController extends Controller {
             'name' => 'required|max:255',
             'description' => 'nullable',
             'price' => 'required|numeric|min:0',
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-    
-        $data = $request->all();
-    
-        if ($request->hasFile('imagen')) {
-            $imagenPath = $request->file('imagen')->store('products', 'public');
-            $data['imagen'] = $imagenPath;
-        }
-    
-        Product::create($data);
-    
-        return redirect()->route('products.index')->with('success', 'Producto creado correctamente.');
-    }
 
-    public function show(Product $product) {
-        return view('products.show', compact('product'));
+        $data = $request->all();
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('products', 'public');
+            $data['image'] = $imagePath;
+        }
+
+        Product::create($data);
+
+        return redirect()->route('products.index')->with('success', 'Producto creado correctamente.');
     }
 
     public function edit(Product $product) {
@@ -47,21 +58,20 @@ class ProductController extends Controller {
             'name' => 'required|max:255',
             'description' => 'nullable',
             'price' => 'required|numeric|min:0',
-            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-    
+
         $data = $request->all();
-    
-        if ($request->hasFile('imagen')) {
-            $imagenPath = $request->file('imagen')->store('products', 'public');
-            $data['imagen'] = $imagenPath;
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('products', 'public');
+            $data['image'] = $imagePath;
         }
-    
+
         $product->update($data);
-    
+
         return redirect()->route('products.index')->with('success', 'Producto actualizado.');
     }
-    
 
     public function destroy(Product $product) {
         $product->delete();
