@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Formulario de creacion de curso</h1>
-    <form action="#" method="get">
+    <form action="" method="get">
         Nombre del curso: <input type="text" name="nombre">
     </form>
 </body>
