@@ -7,45 +7,37 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('admin')->except(['index', 'show']);
-    }
+    public function __construct(){}
 
     public function index() {
         $products = Product::all();
         return view('products.index', compact('products'));
     }
 
-    public function administracion() {
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Debes iniciar sesión.');
-        }
-        return view('products.administracion');
-    }
-
     public function create() {
         return view('products.create');
     }
+
+    
 
     public function store(Request $request) {
         $request->validate([
             'name' => 'required|max:255',
             'description' => 'nullable',
             'price' => 'required|numeric|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-
+    
         $data = $request->all();
-
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('products', 'public');
-            $data['image'] = $imagePath;
+        $data['user_id'] = Auth::id(); // Guardar el usuario autenticado
+    
+        if ($request->hasFile('imagen')) {
+            $imagenPath = $request->file('imagen')->store('products', 'public');
+            $data['imagen'] = $imagenPath;
         }
-
+    
         Product::create($data);
-
+    
         return redirect()->route('products.index')->with('success', 'Producto creado correctamente.');
     }
 
@@ -62,18 +54,19 @@ class ProductController extends Controller
             'name' => 'required|max:255',
             'description' => 'nullable',
             'price' => 'required|numeric|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-
+    
         $data = $request->all();
-
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('products', 'public');
-            $data['image'] = $imagePath;
-        }
-
+        $data['user_id'] = Auth::id(); // Actualizar con el usuario que modifica
+    
+        if ($request->hasFile('imagen')) {
+            $imagenPath = $request->file('imagen')->store('products', 'public');
+            $data['imagen'] = $imagenPath;
+        }    
         $product->update($data);
 
+    
         return redirect()->route('products.index')->with('success', 'Producto actualizado.');
     }
 

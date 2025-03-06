@@ -19,7 +19,7 @@
     </div>
     <div class="mb-3">
         <label class="form-label">Imagen</label>
-        <input type="file" name="image" class="form-control">
+        <input type="file" name="imagen" class="form-control">
         @if($product->image)
             <img src="{{ asset('storage/' . $product->image) }}" alt="Imagen actual" class="img-fluid mt-2" width="150">
         @endif

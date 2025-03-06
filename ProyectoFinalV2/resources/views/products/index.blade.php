@@ -14,6 +14,7 @@
             <th>Nombre</th>
             <th>Precio</th>
             <th>Acciones</th>
+            <th>Ultima Modificacion</th>
         </tr>
     </thead>
     <tbody>
@@ -37,6 +38,7 @@
                     <button class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar producto?')">Eliminar</button>
                 </form>
             </td>
+            <td>{{ $product->user->name ?? 'Desconocido' }}</td>
         </tr>
         @endforeach
     </tbody>

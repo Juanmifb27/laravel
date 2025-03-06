@@ -8,14 +8,14 @@
 </head>
 <body class="container mt-4">
     @if(Auth::check())
-    <a href="{{ route('dashboard') }}">Dashboard</a>
     <form method="POST" action="{{ route('logout') }}" class="d-inline">
         @csrf
-        <button type="submit">Cerrar sesión</button>
+        <button class="btn btn-danger" type="submit">Cerrar sesión</button>
     </form>
+    <p>Bienvenido: {{ auth()->user()->name}}</p>
 @else
-    <a href="{{ route('login') }}">Iniciar sesión</a>
-    <a href="{{ route('register') }}">Registrarse</a>
+    <a class="btn btn-outline-primary" href="{{ route('login') }}">Iniciar sesión</a>
+    <a class="btn btn-outline-dark" href="{{ route('register') }}">Registrarse</a>
 @endif
 
     <h2 class="text-center mb-4">Gestión de Productos</h2>
