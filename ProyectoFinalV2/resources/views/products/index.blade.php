@@ -1,7 +1,10 @@
 @extends('layout')
 
 @section('content')
-<a href="{{ route('products.create') }}" class="btn btn-primary mb-3">Nuevo Producto</a>
+@auth
+    <!-- Mostrar el botón "Nuevo Producto" solo si el usuario está autenticado -->
+    <a href="{{ route('products.create') }}" class="btn btn-primary mt-3">Nuevo Producto</a>
+@endauth
 
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
@@ -31,16 +34,28 @@
             <td>${{ number_format($product->price, 2) }}</td>
             <td>
                 <a href="{{ route('products.show', $product) }}" class="btn btn-info btn-sm">Ver</a>
-                <a href="{{ route('products.edit', $product) }}" class="btn btn-warning btn-sm">Editar</a>
-                <form action="{{ route('products.destroy', $product) }}" method="POST" class="d-inline">
+                @auth
+                <!-- Botón Editar -->
+                <a href="{{ route('products.edit', $product->id) }}" class="btn btn-warning btn-sm">Editar</a>
+
+                <!-- Botón Eliminar -->
+                <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
-                    <button class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar producto?')">Eliminar</button>
+                    <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                 </form>
+            @endauth
             </td>
             <td>{{ $product->user->name ?? 'Desconocido' }}</td>
         </tr>
         @endforeach
     </tbody>
 </table>
+<!-- Paginación -->
+<div class="d-flex justify-content-center">
+    <ul class="pagination pagination-sm">
+        {{ $products->links('pagination::bootstrap-5') }}
+    </ul>
+</div>
+
 @endsection
