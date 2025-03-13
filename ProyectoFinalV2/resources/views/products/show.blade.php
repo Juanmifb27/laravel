@@ -14,6 +14,7 @@
 
         <br>
         <a href="{{ route('products.index') }}" class="btn btn-secondary">Volver</a>
+        @auth
         <a href="{{ route('products.edit', $product) }}" class="btn btn-warning">Editar</a>
 
         <form action="{{ route('products.destroy', $product) }}" method="POST" class="d-inline">
@@ -21,5 +22,6 @@
             @method('DELETE')
             <button class="btn btn-danger" onclick="return confirm('¿Eliminar producto?')">Eliminar</button>
         </form>
+        @endauth
     </div>
 @endsection

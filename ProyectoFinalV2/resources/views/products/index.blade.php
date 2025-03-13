@@ -31,7 +31,7 @@
                 @endif
             </td>
             <td>{{ $product->name }}</td>
-            <td>${{ number_format($product->price, 2) }}</td>
+            <td>{{ number_format($product->price, 2) }}€</td>
             <td>
                 <a href="{{ route('products.show', $product) }}" class="btn btn-info btn-sm">Ver</a>
                 @auth
